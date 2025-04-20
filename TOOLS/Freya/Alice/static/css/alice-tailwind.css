@@ -1,0 +1,212 @@
+/* Custom styles for Alice to complement Tailwind CSS */
+
+/* Active navigation styling */
+.nav-link.active {
+    background-color: #f5f3ff;
+    color: #7c3aed;
+    font-weight: 500;
+}
+
+/* Character card styles */
+.character-card {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.character-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.character-card .character-image {
+    transition: all 0.3s ease;
+}
+
+.character-card:hover .character-image {
+    transform: scale(1.05);
+}
+
+.character-card .character-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    padding: 1.5rem 1rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.character-card:hover .character-overlay {
+    padding-bottom: 2rem;
+}
+
+/* Dialogue styles */
+.dialogue-bubble {
+    position: relative;
+    background-color: #f5f3ff;
+    border-radius: 1rem;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.dialogue-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -0.5rem;
+    left: 1.5rem;
+    width: 1rem;
+    height: 1rem;
+    background-color: #f5f3ff;
+    transform: rotate(45deg);
+}
+
+.dialogue-bubble.response {
+    background-color: #ecfdf5;
+}
+
+.dialogue-bubble.response::after {
+    background-color: #ecfdf5;
+    left: auto;
+    right: 1.5rem;
+}
+
+/* Network graph styles */
+#relationship-graph {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background-color: #f8f7ff;
+}
+
+.vis-network {
+    outline: none;
+}
+
+/* Location card styles */
+.location-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.location-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.location-card .location-image {
+    height: 150px;
+    background-size: cover;
+    background-position: center;
+    transition: all 0.3s ease;
+}
+
+.location-card:hover .location-image {
+    transform: scale(1.05);
+}
+
+/* Quest styles */
+.quest-card {
+    border-left: 4px solid #eab308;
+    transition: all 0.3s ease;
+}
+
+.quest-card:hover {
+    transform: translateX(4px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.quest-card.completed {
+    border-left-color: #22c55e;
+}
+
+.quest-card.failed {
+    border-left-color: #ef4444;
+}
+
+/* Timeline styles */
+.timeline {
+    position: relative;
+    padding-left: 2rem;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0.75rem;
+    width: 2px;
+    background-color: #e5e7eb;
+}
+
+.timeline-item {
+    position: relative;
+    padding-bottom: 1.5rem;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    top: 0.25rem;
+    left: -2rem;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    background-color: #8b5cf6;
+    border: 2px solid white;
+    z-index: 1;
+}
+
+/* Drag and drop for dialogue tree */
+.dialogue-tree-node {
+    cursor: grab;
+    transition: all 0.2s ease;
+}
+
+.dialogue-tree-node:active {
+    cursor: grabbing;
+}
+
+.dialogue-tree-node.is-dragging {
+    opacity: 0.8;
+    transform: scale(1.02);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.dialogue-tree-connector {
+    position: absolute;
+    background-color: #e5e7eb;
+    z-index: -1;
+    transition: all 0.3s ease;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+}
+
+/* Animation for relationship graph */
+@keyframes fadeInGraph {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+#relationship-graph {
+    animation: fadeInGraph 1s ease forwards;
+} 

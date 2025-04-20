@@ -1,0 +1,23 @@
+I want to make a game based on the j2me game Farm Tycoon.
+
+First I want to write a documentation and PRD and detailed System for the process of development including all features (keep in files for confirmed and potential which needs to be aproved by me)
+
+Also desine a system which will allow me to gradually develop this game and story by working just 30 mintues and 1 hour focused on it with plans and daily routines. consider development and brainstorming processes
+
+use markdown, svg diagrams, mermaid, tables.
+
+Ask me any questions require.
+add suitable features and mehanics and ideas following to the prelude.md (more like a seed file)
+make a good process / tool for me to store brainstorm ideas and put proper tags and use catagories like planned, working on, future, selected, and give an idea score
+
+
+Do as needed
+
+organize in the most userfriendly way
+also there should be a documentation and guide for developer and player seperate
+
+ask me any questions as needed 
+
+==============================
+
+

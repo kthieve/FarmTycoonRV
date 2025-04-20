@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alice - Story Development Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            light: '#4ade80',
+                            DEFAULT: '#22c55e',
+                            dark: '#16a34a'
+                        },
+                        secondary: {
+                            light: '#93c5fd',
+                            DEFAULT: '#3b82f6',
+                            dark: '#2563eb'
+                        },
+                        alice: {
+                            light: '#c4b5fd',
+                            DEFAULT: '#8b5cf6',
+                            dark: '#7c3aed'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/tailwind-styles.css">
+    <link rel="stylesheet" href="/alice/static/css/alice-tailwind.css">
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.6/vis-network.min.js"></script>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800 antialiased">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="bg-white w-64 shadow-md flex-shrink-0 border-r border-gray-200 transition-all duration-300 hidden md:block" id="sidebar">
+            <div class="p-4 border-b border-gray-200">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-book-open text-alice-dark text-2xl"></i>
+                    <h1 class="text-2xl font-bold text-alice-dark">Alice</h1>
+                </div>
+                <p class="text-sm text-gray-500 mt-1">Farm Tycoon RV - Story Dev Tool</p>
+            </div>
+            
+            <nav class="p-2">
+                <ul class="space-y-1">
+                    <li>
+                        <a href="#" class="nav-link active flex items-center p-3 text-gray-700 rounded-lg hover:bg-gray-100 group transition-all" 
+                           data-section="story-dashboard">
+                            <i class="fas fa-home text-alice w-5"></i>
+                            <span class="ml-3">Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link flex items-center p-3 text-gray-700 rounded-lg hover:bg-gray-100 group transition-all" 
+                           data-section="characters">
+                            <i class="fas fa-user text-blue-500 w-5"></i>
+                            <span class="ml-3">Characters</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link flex items-center p-3 text-gray-700 rounded-lg hover:bg-gray-100 group transition-all" 
+                           data-section="locations">
+                            <i class="fas fa-map-marker-alt text-red-500 w-5"></i>
+                            <span class="ml-3">Locations</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link flex items-center p-3 text-gray-700 rounded-lg hover:bg-gray-100 group transition-all" 
+                           data-section="quests">
+                            <i class="fas fa-scroll text-amber-500 w-5"></i>
+                            <span class="ml-3">Quests</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link flex items-center p-3 text-gray-700 rounded-lg hover:bg-gray-100 group transition-all" 
+                           data-section="dialogues">
+                            <i class="fas fa-comments text-emerald-500 w-5"></i>
+                            <span class="ml-3">Dialogues</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link flex items-center p-3 text-gray-700 rounded-lg hover:bg-gray-100 group transition-all" 
+                           data-section="story-arcs">
+                            <i class="fas fa-sitemap text-indigo-500 w-5"></i>
+                            <span class="ml-3">Story Arcs</span>
+                        </a>
+                    </li>
+                    <li class="border-t border-gray-200 pt-2 mt-2">
+                        <a href="/" class="freya-link flex items-center p-3 text-gray-700 rounded-lg hover:bg-green-100 group transition-all">
+                            <i class="fas fa-seedling text-primary w-5"></i>
+                            <span class="ml-3 text-primary-dark font-medium">Back to Freya</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top Navigation -->
+            <header class="bg-white shadow-sm z-10">
+                <div class="flex items-center justify-between p-4">
+                    <div class="flex items-center">
+                        <button id="mobile-menu-button" class="md:hidden p-2 rounded-md hover:bg-gray-100 focus:outline-none">
+                            <i class="fas fa-bars text-gray-600"></i>
+                        </button>
+                        <h2 class="text-xl font-semibold text-gray-800 md:ml-2" id="page-title">Story Dashboard</h2>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="relative">
+                            <input type="text" id="story-search" 
+                                   class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-alice focus:border-alice text-sm w-64"
+                                   placeholder="Search story elements...">
+                            <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                        </div>
+                        <button id="create-story-btn" class="bg-alice hover:bg-alice-dark text-white px-4 py-2 rounded-lg transition-colors">
+                            <i class="fas fa-plus mr-1"></i> Create
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content Area -->
+            <main class="flex-1 overflow-y-auto bg-gray-50 p-4">
+                <!-- Story Dashboard Section -->
+                <section id="story-dashboard" class="content-section active">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                        <div class="bg-white rounded-lg shadow-sm p-5 col-span-1 lg:col-span-2">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">Character Relationships</h3>
+                                <div class="text-sm text-gray-500">Interactive Network Graph</div>
+                            </div>
+                            <div id="relationship-graph" class="h-64 w-full"></div>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg shadow-sm p-5">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">Story Stats</h3>
+                                <a href="#" class="text-alice hover:text-alice-dark text-sm">View All</a>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-blue-50 p-4 rounded-lg">
+                                    <div class="text-3xl font-bold text-blue-500" id="characters-count">0</div>
+                                    <div class="text-sm text-gray-600">Characters</div>
+                                </div>
+                                <div class="bg-red-50 p-4 rounded-lg">
+                                    <div class="text-3xl font-bold text-red-500" id="locations-count">0</div>
+                                    <div class="text-sm text-gray-600">Locations</div>
+                                </div>
+                                <div class="bg-yellow-50 p-4 rounded-lg">
+                                    <div class="text-3xl font-bold text-yellow-500" id="quests-count">0</div>
+                                    <div class="text-sm text-gray-600">Quests</div>
+                                </div>
+                                <div class="bg-green-50 p-4 rounded-lg">
+                                    <div class="text-3xl font-bold text-green-500" id="dialogues-count">0</div>
+                                    <div class="text-sm text-gray-600">Dialogues</div>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <div class="flex justify-between mb-1 text-sm">
+                                    <div class="text-gray-600">Story Completion</div>
+                                    <div class="text-gray-800 font-medium" id="story-completion">0%</div>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-alice h-2.5 rounded-full" id="story-progress" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg shadow-sm p-5">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">Main Characters</h3>
+                                <a href="#" class="text-alice hover:text-alice-dark text-sm" data-section="characters">View All</a>
+                            </div>
+                            <ul class="divide-y divide-gray-200" id="dashboard-characters-list">
+                                <li class="py-3 text-gray-500 italic">Loading characters...</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg shadow-sm p-5">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">Key Locations</h3>
+                                <a href="#" class="text-alice hover:text-alice-dark text-sm" data-section="locations">View All</a>
+                            </div>
+                            <ul class="divide-y divide-gray-200" id="dashboard-locations-list">
+                                <li class="py-3 text-gray-500 italic">Loading locations...</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gradient-to-br from-alice-light to-alice p-5 rounded-lg shadow-sm text-white">
+                            <h3 class="text-lg font-semibold mb-2">Quick Create</h3>
+                            <div class="grid grid-cols-2 gap-2 mt-3">
+                                <button class="bg-white bg-opacity-20 hover:bg-opacity-30 p-3 rounded-lg flex items-center justify-center transition-all" id="create-character-btn">
+                                    <i class="fas fa-user-plus mr-2"></i> Character
+                                </button>
+                                <button class="bg-white bg-opacity-20 hover:bg-opacity-30 p-3 rounded-lg flex items-center justify-center transition-all" id="create-location-btn">
+                                    <i class="fas fa-map-marked mr-2"></i> Location
+                                </button>
+                                <button class="bg-white bg-opacity-20 hover:bg-opacity-30 p-3 rounded-lg flex items-center justify-center transition-all" id="create-quest-btn">
+                                    <i class="fas fa-scroll mr-2"></i> Quest
+                                </button>
+                                <button class="bg-white bg-opacity-20 hover:bg-opacity-30 p-3 rounded-lg flex items-center justify-center transition-all" id="create-dialogue-btn">
+                                    <i class="fas fa-comments mr-2"></i> Dialogue
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Characters Section -->
+                <section id="characters" class="content-section hidden">
+                    <div class="bg-white rounded-lg shadow-sm p-5 mb-6">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Characters</h3>
+                            <div class="flex flex-col md:flex-row gap-3">
+                                <div class="relative">
+                                    <input type="text" id="character-search" 
+                                        class="pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-alice focus:border-alice text-sm w-full"
+                                        placeholder="Search characters...">
+                                    <i class="fas fa-search absolute left-3 top-2.5 text-gray-400"></i>
+                                </div>
+                                <select id="character-filter" 
+                                    class="border border-gray-300 rounded-lg text-sm px-3 py-2 focus:ring-alice focus:border-alice">
+                                    <option value="all">All Factions</option>
+                                    <option value="Townspeople">Townspeople</option>
+                                    <option value="Farmers">Farmers</option>
+                                    <option value="Merchants">Merchants</option>
+                                    <option value="Visitors">Visitors</option>
+                                </select>
+                                <button id="new-character-btn" 
+                                    class="bg-alice hover:bg-alice-dark text-white px-4 py-2 rounded-lg transition-colors">
+                                    <i class="fas fa-plus mr-2"></i> New Character
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="characters-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="characters-grid">
+                        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 text-gray-500 italic flex items-center justify-center">
+                            Loading characters...
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Other sections will be added: locations, quests, dialogues, story arcs -->
+            </main>
+
+            <!-- Footer -->
+            <footer class="bg-white p-4 border-t border-gray-200 text-center text-sm text-gray-500">
+                <p>Alice v1.0.0 - Farm Tycoon RV Story Development Tool</p>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Modal Templates -->
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden" id="modal-container">
+        <!-- Modal content will be injected here -->
+    </div>
+
+    <script src="/alice/static/js/alice-app.js"></script>
+    <script src="/alice/static/js/alice-tailwind.js"></script>
+</body>
+</html> 

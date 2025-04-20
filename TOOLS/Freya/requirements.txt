@@ -1,0 +1,15 @@
+flask==2.0.1
+markdown==3.3.4
+python-frontmatter==1.0.0
+flask-cors==3.0.10
+watchdog==2.1.6
+Pillow==9.5.0
+python-dotenv==1.0.0
+werkzeug==2.0.3
+mermaid-cli==0.1.2
+pymdown-extensions==10.0
+Flask-WTF==1.1.1
+Flask-Login==0.6.2
+py2vega==0.6.1
+plotly==5.15.0
+pandas==2.0.3 
